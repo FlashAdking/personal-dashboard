@@ -21,11 +21,6 @@ const DashboardLayout: React.FC = () => {
     }
   }, [darkMode])
 
-  // Handle mobile sidebar close when clicking outside
-  const handleOverlayClick = () => {
-    dispatch(toggleSidebar())
-  }
-
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       darkMode ? 'dark bg-gray-900' : 'bg-gray-50'
@@ -39,24 +34,29 @@ const DashboardLayout: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-            onClick={handleOverlayClick}
+            onClick={() => dispatch(toggleSidebar())}
           />
         )}
       </AnimatePresence>
 
       {/* Layout Container */}
       <div className="flex">
-        {/* Sidebar - CRITICAL FIX: Proper mobile positioning */}
+        {/* FIXED: Sidebar - Works for both desktop and mobile */}
         <div className={`
-          fixed md:static top-0 left-0 z-50 h-screen w-64
+          fixed md:static top-0 left-0 z-50 h-screen
           transform transition-transform duration-300 ease-in-out
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          ${sidebarOpen 
+            ? 'translate-x-0 w-64' 
+            : '-translate-x-full w-0 md:-translate-x-64 md:w-0'
+          }
         `}>
-          <Sidebar />
+          <div className="w-64 h-full">
+            <Sidebar />
+          </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 w-full md:ml-0">
+        {/* FIXED: Main Content - Adjusts to sidebar state */}
+        <div className="flex-1 w-full">
           <Header />
           <main className="p-4 sm:p-6 lg:p-8" data-testid="dashboard-main">
             <ContentFeed />
