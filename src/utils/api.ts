@@ -160,7 +160,7 @@ export const newsAPI = {
   }
 }
 
-// Enhanced TMDB Movie API Integration (UNCHANGED - Working perfectly)
+// Enhanced TMDB Movie API Integration
 export const movieAPI = {
   getTrendingMovies: async (page: number = 1): Promise<APIResponse> => {
     try {
@@ -272,7 +272,7 @@ export const movieAPI = {
   }
 }
 
-// OMDb API Integration (UNCHANGED)
+// OMDb API Integration - Enhanced for trending content
 export const omdbAPI = {
   searchMovies: async (query: string, page: number = 1): Promise<APIResponse> => {
     try {
@@ -308,6 +308,50 @@ export const omdbAPI = {
       }
     } catch (error) {
       return handleApiError(error, 'OMDb')
+    }
+  },
+
+  // NEW: Get popular movies for trending content
+  getTrendingMovies: async (page: number = 1): Promise<APIResponse> => {
+    try {
+      // Use popular movie titles for OMDb trending
+      const popularMovieQueries = ['Avengers', 'Batman', 'Spider', 'Star Wars', 'Marvel', 'Fast', 'John Wick', 'Mission']
+      const randomQuery = popularMovieQueries[Math.floor(Math.random() * popularMovieQueries.length)]
+      
+      console.log(`Fetching trending movies from OMDb with query: ${randomQuery}`)
+      
+      const response = await api.get('http://www.omdbapi.com/', {
+        params: {
+          apikey: process.env.NEXT_PUBLIC_OMDB_API_KEY,
+          s: randomQuery,
+          type: 'movie',
+          page: 1
+        }
+      })
+
+      if (response.data.Response === 'False') {
+        return { articles: [], hasMore: false, totalResults: 0 }
+      }
+
+      const articles: ContentItem[] = response.data.Search?.slice(0, 5).map((movie: Record<string, unknown>, index: number) => ({
+        id: `omdb-trending-${movie.imdbID || `${randomQuery}-${index}`}`,
+        type: 'movie' as const,
+        title: String(movie.Title),
+        description: `${movie.Year} ${movie.Type} - Popular on IMDb`,
+        imageUrl: movie.Poster && movie.Poster !== 'N/A' ? String(movie.Poster) : undefined,
+        url: `https://www.imdb.com/title/${movie.imdbID}`,
+        category: 'entertainment',
+        publishedAt: String(movie.Year),
+        source: 'OMDb Trending'
+      })) || []
+
+      return {
+        articles,
+        hasMore: false,
+        totalResults: articles.length
+      }
+    } catch (error) {
+      return handleApiError(error, 'OMDb Trending')
     }
   }
 }
@@ -399,13 +443,13 @@ export const socialAPI = {
   }
 }
 
-// CRITICAL FIX: Unified Content API with Promise.allSettled() (UNCHANGED - Working)
+// UPDATED: Unified Content API using BOTH movie APIs
 export const contentAPI = {
   getAllContent: async (categories: string[], page: number = 1, contentTypes: string[] = ['news', 'movie', 'social']): Promise<APIResponse> => {
     try {
       const promises: Promise<APIResponse>[] = []
       
-      // Add each API call with individual error handling
+      // Add news API call
       if (contentTypes.includes('news') && categories.length > 0) {
         promises.push(
           newsAPI.getNews(categories, page).catch(error => {
@@ -415,15 +459,26 @@ export const contentAPI = {
         )
       }
       
+      // Add BOTH movie APIs for comprehensive coverage
       if (contentTypes.includes('movie')) {
+        // TMDB trending movies
         promises.push(
           movieAPI.getTrendingMovies(page).catch(error => {
-            console.warn('TMDB failed, continuing without movies:', error.message)
+            console.warn('TMDB failed, continuing without TMDB movies:', error.message)
+            return { articles: [], hasMore: false, totalResults: 0 }
+          })
+        )
+        
+        // OMDb trending movies
+        promises.push(
+          omdbAPI.getTrendingMovies(page).catch(error => {
+            console.warn('OMDb failed, continuing without OMDb movies:', error.message)
             return { articles: [], hasMore: false, totalResults: 0 }
           })
         )
       }
       
+      // Add social API call
       if (contentTypes.includes('social')) {
         promises.push(
           socialAPI.getSocialPosts(categories, page).catch(error => {
@@ -474,12 +529,15 @@ export const contentAPI = {
     try {
       const promises: Promise<APIResponse>[] = []
       
-      // Search across all content types with individual error handling
+      // Search across ALL content types including BOTH movie APIs
       promises.push(
         newsAPI.searchNews(query, categories, page).catch(() => ({ articles: [], hasMore: false, totalResults: 0 }))
       )
       promises.push(
         movieAPI.searchMovies(query, page).catch(() => ({ articles: [], hasMore: false, totalResults: 0 }))
+      )
+      promises.push(
+        omdbAPI.searchMovies(query, page).catch(() => ({ articles: [], hasMore: false, totalResults: 0 }))
       )
       promises.push(
         socialAPI.searchSocialPosts(query, categories, page).catch(() => ({ articles: [], hasMore: false, totalResults: 0 }))
@@ -503,6 +561,8 @@ export const contentAPI = {
       const sortedResults = filteredArticles.sort((a, b) => 
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       )
+
+      console.log(`Search found ${sortedResults.length} total results from ${successfulResponses.length} sources`)
 
       return {
         articles: sortedResults,

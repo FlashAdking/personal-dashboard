@@ -60,7 +60,7 @@ const SettingsPanel: React.FC = () => {
 
   return (
     <>
-      {/* Settings Trigger Button */}
+      {/* Settings Trigger Button - Mobile responsive sizing */}
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -69,7 +69,7 @@ const SettingsPanel: React.FC = () => {
         data-testid="settings-button"
         title="Settings"
       >
-        <Cog6ToothIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+        <Cog6ToothIcon className="h-5 w-5 md:h-6 md:w-6 text-gray-600 dark:text-gray-300" />
       </motion.button>
 
       {/* Settings Modal */}
@@ -79,7 +79,7 @@ const SettingsPanel: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4"
             onClick={() => setIsOpen(false)}
             data-testid="settings-overlay"
           >
@@ -89,20 +89,20 @@ const SettingsPanel: React.FC = () => {
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               onClick={e => e.stopPropagation()}
-              className="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl"
+              className="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full max-h-[95vh] sm:max-h-[85vh] overflow-hidden shadow-2xl mx-2 sm:mx-0"
               data-testid="settings-panel"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                    <Cog6ToothIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              {/* Header - Mobile responsive */}
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                    <Cog6ToothIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                       Settings
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                       Customize your dashboard experience
                     </p>
                   </div>
@@ -116,28 +116,29 @@ const SettingsPanel: React.FC = () => {
                 </button>
               </div>
 
-              {/* Content - Scrollable */}
-              <div className="overflow-y-auto max-h-[calc(85vh-80px)]">
+              {/* Content - Scrollable with mobile adjustments */}
+              <div className="overflow-y-auto max-h-[calc(95vh-80px)] sm:max-h-[calc(85vh-80px)]">
                 
-                {/* Content Categories Section */}
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <TagIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                {/* Content Categories Section - Mobile responsive grid */}
+                <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                    <TagIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                       Content Categories
                     </h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                     Choose the topics you&apos;re interested in to personalize your feed
                   </p>
                   
-                  <div className="grid grid-cols-2 gap-3">
+                  {/* Mobile: 1 column, SM: 2 columns */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {availableCategories.map(category => (
                       <motion.label 
                         key={category.id} 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className={`flex items-center space-x-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                        className={`flex items-center space-x-2 sm:space-x-3 p-2.5 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${
                           categories.includes(category.id)
                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
@@ -150,9 +151,9 @@ const SettingsPanel: React.FC = () => {
                           onChange={() => handleCategoryToggle(category.id)}
                           className="sr-only"
                         />
-                        <span className="text-xl">{category.icon}</span>
+                        <span className="text-lg sm:text-xl">{category.icon}</span>
                         <div className="flex-1">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                             {category.label}
                           </span>
                         </div>
@@ -160,9 +161,9 @@ const SettingsPanel: React.FC = () => {
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"
+                            className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded-full flex items-center justify-center"
                           >
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                           </motion.div>
@@ -171,48 +172,49 @@ const SettingsPanel: React.FC = () => {
                     ))}
                   </div>
                   
-                  <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="mt-3 sm:mt-4 text-xs text-gray-500 dark:text-gray-400">
                     Selected: {categories.length} {categories.length === 1 ? 'category' : 'categories'}
                   </div>
                 </div>
 
-                {/* Language Selection Section */}
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <GlobeAltIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                {/* Language Selection Section - Mobile responsive */}
+                <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                    <GlobeAltIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 dark:text-green-400" />
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                       Language
                     </h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                     Select your preferred language for the dashboard
                   </p>
                   
-                  <div className="grid grid-cols-2 gap-3">
+                  {/* Mobile: 1 column, SM: 2 columns */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {languages.map(lang => (
                       <motion.button
                         key={lang.code}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleLanguageChange(lang.code)}
-                        className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all ${
+                        className={`flex items-center space-x-2 sm:space-x-3 p-2.5 sm:p-3 rounded-lg border-2 transition-all ${
                           language === lang.code
                             ? 'border-green-500 bg-green-50 dark:bg-green-900/20 dark:border-green-400'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                         }`}
                         data-testid={`language-${lang.code}`}
                       >
-                        <span className="text-xl">{lang.flag}</span>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <span className="text-lg sm:text-xl">{lang.flag}</span>
+                        <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                           {lang.name}
                         </span>
                         {language === lang.code && (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="ml-auto w-5 h-5 bg-green-500 rounded-full flex items-center justify-center"
+                            className="ml-auto w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full flex items-center justify-center"
                           >
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                           </motion.div>
@@ -222,36 +224,38 @@ const SettingsPanel: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Notification Settings Section */}
-                <div className="p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <BellIcon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                {/* Notification Settings Section - Mobile friendly */}
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                    <BellIcon className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600 dark:text-orange-400" />
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                       Notifications
                     </h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                     Manage what notifications you want to receive
                   </p>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {Object.entries(notificationSettings).map(([key, value]) => (
                       <motion.div
                         key={key}
                         whileHover={{ scale: 1.01 }}
-                        className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                        className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
                       >
-                        <div className="flex items-center space-x-3">
-                          <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
-                            {key === 'news' && '📰'}
-                            {key === 'recommendations' && '🎯'}
-                            {key === 'social' && '📱'}
+                        <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                          <div className="p-1.5 sm:p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                            <span className="text-sm sm:text-base">
+                              {key === 'news' && '📰'}
+                              {key === 'recommendations' && '🎯'}
+                              {key === 'social' && '📱'}
+                            </span>
                           </div>
-                          <div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
+                          <div className="flex-1 min-w-0">
+                            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 capitalize block truncate">
                               {key} notifications
                             </span>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
                               {key === 'news' && 'Breaking news and articles'}
                               {key === 'recommendations' && 'New movies and content suggestions'}
                               {key === 'social' && 'Social media updates and trends'}
@@ -261,7 +265,7 @@ const SettingsPanel: React.FC = () => {
                         
                         <motion.label
                           whileTap={{ scale: 0.95 }}
-                          className="relative inline-flex items-center cursor-pointer"
+                          className="relative inline-flex items-center cursor-pointer ml-2"
                           data-testid={`notification-${key}`}
                         >
                           <input
@@ -270,24 +274,24 @@ const SettingsPanel: React.FC = () => {
                             onChange={() => handleNotificationToggle(key as keyof typeof notificationSettings)}
                             className="sr-only peer"
                           />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                          <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         </motion.label>
                       </motion.div>
                     ))}
                   </div>
                 </div>
 
-                {/* Footer Actions */}
-                <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                {/* Footer Actions - Mobile responsive */}
+                <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                  <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
                       Settings are automatically saved
                     </p>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setIsOpen(false)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                      className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                       data-testid="settings-save"
                     >
                       Done
