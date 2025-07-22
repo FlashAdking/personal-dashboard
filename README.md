@@ -1,17 +1,20 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
 
 ## Getting Started
 
-First, run the development server:
+steps to run the Application 
+1. Clone Repositery
+```bash 
+git clone https://github.com/FlashAdking/personal-dashboard.git
+```
+2. Change Directory
+```bash
+cd .\personalised-content-dashboard\
 
+```
+3. run the project
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

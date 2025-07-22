@@ -13,7 +13,6 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "type-check": "tsc --noEmit"
-
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

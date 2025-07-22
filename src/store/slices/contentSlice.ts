@@ -187,4 +187,5 @@ const contentSlice = createSlice({
 })
 
 export const { reorderContent, clearContent, setFavorites } = contentSlice.actions
+
 export default contentSlice.reducer;

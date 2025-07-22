@@ -6,7 +6,7 @@ import { addToFavorites, removeFromFavorites } from '../../store/slices/userPref
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { motion } from 'framer-motion'
-import { 
+import {
   HeartIcon as HeartOutline,
   ShareIcon,
   BookmarkIcon,
@@ -46,7 +46,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
   const handleFavoriteToggle = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     if (isFavorite) {
       dispatch(removeFromFavorites(item.id))
     } else {
@@ -57,8 +57,8 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
   const handleCardClick = useCallback((e: React.MouseEvent) => {
     // Prevent navigation if this is a drag operation or if default was prevented
     if (e.defaultPrevented || isDragging) return
-    
-    if (item.url && item.url !== '#') {
+
+    if (item.url && item.url !== '#' && item.url.startsWith('http')) {
       window.open(item.url, '_blank', 'noopener,noreferrer')
     }
   }, [item.url, isDragging])
@@ -88,19 +88,20 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
     <motion.div
       ref={setNodeRef}
       style={style}
+      role="article"
+      aria-label={`${item.type} article: ${item.title}`}
       layout
       whileHover={{ y: isDragging ? 0 : -4 }} // Don't animate during drag
       onHoverStart={() => !isDragging && setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden ${
-        isDragging ? 'opacity-50 shadow-2xl z-50 cursor-grabbing' : 'cursor-pointer'
-      }`}
+      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden ${isDragging ? 'opacity-50 shadow-2xl z-50 cursor-grabbing' : 'cursor-pointer'
+        }`}
       onClick={handleCardClick}
       data-testid="content-card"
     >
       {/* Drag Handle */}
-      <div 
-        {...attributes} 
+      <div
+        {...attributes}
         {...listeners}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
@@ -114,6 +115,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
       <div className="relative h-48 overflow-hidden">
         {item.imageUrl && !imageError ? (
           <motion.img
+            loading="lazy"
             layoutId={`image-${item.id}`}
             src={item.imageUrl}
             alt={item.title}
@@ -125,12 +127,12 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
         ) : (
           <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
             <div className="text-4xl">
-              {item.type === 'news' ? '📰' : 
-               item.type === 'movie' ? '🎬' : '📱'}
+              {item.type === 'news' ? '📰' :
+                item.type === 'movie' ? '🎬' : '📱'}
             </div>
           </div>
         )}
-        
+
         {/* Content Type Badge */}
         <div className="absolute top-3 left-3">
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getContentTypeColor(item.type)}`}>
@@ -175,7 +177,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
             </span>
             <span className="font-medium">{item.source}</span>
           </div>
-          
+
           <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
             {item.category}
           </span>
@@ -193,7 +195,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
               <EyeIcon className="h-4 w-4" />
               <span className="text-xs">View</span>
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -203,7 +205,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
               <ShareIcon className="h-4 w-4" />
               <span className="text-xs">Share</span>
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -214,7 +216,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
               <span className="text-xs">Save</span>
             </motion.button>
           </div>
-          
+
           {item.url && item.url !== '#' && (
             <motion.button
               whileHover={{ scale: 1.02 }}
