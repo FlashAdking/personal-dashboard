@@ -11,7 +11,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   XMarkIcon, 
   Cog6ToothIcon,
-  UserCircleIcon,
   BellIcon,
   GlobeAltIcon,
   TagIcon
@@ -129,7 +128,7 @@ const SettingsPanel: React.FC = () => {
                     </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                    Choose the topics you're interested in to personalize your feed
+                    Choose the topics you&apos;re interested in to personalize your feed
                   </p>
                   
                   <div className="grid grid-cols-2 gap-3">
