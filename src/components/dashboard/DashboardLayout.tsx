@@ -23,9 +23,7 @@ const DashboardLayout: React.FC = () => {
 
   // Handle mobile sidebar close when clicking outside
   const handleOverlayClick = () => {
-    if (window.innerWidth < 768) { // Only close on mobile
-      dispatch(toggleSidebar())
-    }
+    dispatch(toggleSidebar())
   }
 
   return (
@@ -40,29 +38,25 @@ const DashboardLayout: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
             onClick={handleOverlayClick}
           />
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col md:flex-row">
-        {/* Sidebar */}
-        <motion.div
-          initial={{ x: -300 }}
-          animate={{ 
-            x: sidebarOpen ? 0 : -300 
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed md:relative left-0 top-0 z-40 h-screen w-64"
-        >
+      {/* Layout Container */}
+      <div className="flex">
+        {/* Sidebar - CRITICAL FIX: Proper mobile positioning */}
+        <div className={`
+          fixed md:static top-0 left-0 z-50 h-screen w-64
+          transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        `}>
           <Sidebar />
-        </motion.div>
+        </div>
 
-        {/* Main Content - FIXED: Proper mobile spacing */}
-        <div className={`flex-1 transition-all duration-300 w-full ${
-          sidebarOpen ? 'md:ml-0' : ''
-        }`}>
+        {/* Main Content */}
+        <div className="flex-1 w-full md:ml-0">
           <Header />
           <main className="p-4 sm:p-6 lg:p-8" data-testid="dashboard-main">
             <ContentFeed />
